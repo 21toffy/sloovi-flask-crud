@@ -186,7 +186,16 @@ def get_post_put_delete_template(template_id):
         return make_response("Template Not found", 401)
     if request.method == "GET":
         # querying the database
-        return make_response(jsonify(template_object.to_json()), 200)
+
+        output = {
+            "id": str(template_object.id),
+            "author": template_object.author.email,
+            "template_name": template_object.template_name,
+            'subject': template_object.subject,
+            "body": template_object.subject
+
+        }
+        return output , 200
     elif request.method == "PUT":
         content = request.json
         # template_object = Template.objects(id = template_id).first()
