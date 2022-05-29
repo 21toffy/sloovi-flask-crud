@@ -96,9 +96,16 @@ def login():
             {'WWW-Authenticate' : 'Basic realm ="User does not exist !!"'}
         )  
     if check_password_hash(user.password, auth.get('password')):
-        access_token = create_access_token(identity=str(user.id))
-        return jsonify({"token": access_token.decode("utf-8")}), 201
-    return jsonify({"message":"Could not verify something else went wrong"}), 403
+        token = create_access_token(identity=str(user.id))
+        try:
+            access_token = token.decode("utf-8")
+            return jsonify({"access_token": access_token}), 201
+
+        except Exception as e:
+            access_token = token
+            return jsonify({"access_token": access_token}), 201
+
+    return jsonify({"message":"Could not verify your identity"}), 403
     
 
 @app.route('/register', methods=["POST"])
