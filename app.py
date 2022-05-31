@@ -175,15 +175,17 @@ def get_my_templates():
 
 
 
+# 6293b4261b6e495b0e70f806
 # User Database Route
 # this route sends back list of users
 @app.route('/template/<template_id>', methods =['GET', 'PUT', 'DELETE'])
 # @token_required
 @jwt_required()
 def get_post_put_delete_template(template_id):
-    template_object = Template.objects(id=template_id).first()
+    logged_in_user = get_jwt_identity()
+    template_object = Template.objects(id=template_id, author = logged_in_user).first()
     if template_object is None:
-        return make_response("Template Not found", 401)
+        return make_response("Template Not found", 404)
     if request.method == "GET":
         # querying the database
 
@@ -193,7 +195,6 @@ def get_post_put_delete_template(template_id):
             "template_name": template_object.template_name,
             'subject': template_object.subject,
             "body": template_object.subject
-
         }
         return output , 200
     elif request.method == "PUT":
