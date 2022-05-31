@@ -31,8 +31,10 @@ DB_URI = "mongodb+srv://flask_crud_admin:"+ urllib.parse.quote(password) +"@clus
 app.config["MONGODB_HOST"] = DB_URI
 
 secret_key_string = 'flask-crud-api&05bm5^wlyw%^emin36d7up(+=2p2g6^7ghv(r&yt1jg8f620*'
+
 app.config["SECRET_KEY"] = secret_key_string
-# app.config['SECRET_KEY']='004f2af45d3a4e161a7dd2d17fdae47f'
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=100)
+app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=30)
 
 
 db = MongoEngine()
